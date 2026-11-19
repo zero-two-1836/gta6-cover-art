@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vice Coast Cover Lab — GTA 6-style cover art, offline</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23ff2e88'/%3E%3Ctext x='16' y='24' font-family='Arial Black' font-size='19' font-weight='900' text-anchor='middle' fill='white'%3EV%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<main class="app">
+  <section class="controls" aria-label="Cover controls">
+    <header>
+      <h1>Vice Coast <span>Cover Lab</span></h1>
+      <p>Drop in your photos, pick a layout, letter it like a poster — and export a share-ready PNG. Nothing leaves your machine.</p>
+      <div class="steps"><span>1 Photo</span><span>2 Layout</span><span>3 Lettering</span><span>4 Export</span></div>
+    </header>
+
+    <div class="group">
+      <h2>Photos</h2>
+      <input id="photo" type="file" accept="image/*" multiple hidden>
+      <div class="row">
+        <button id="add-photos" type="button" class="btn primary">Add photos</button>
+        <button id="sample-boulevard" type="button" class="btn">Boulevard</button>
+        <button id="sample-neon" type="button" class="btn">Neon street</button>
+        <button id="sample-pier" type="button" class="btn">Pier</button>
+      </div>
+      <div id="photo-tray" class="tray" aria-label="Your photos"></div>
+      <p class="hint">Click a panel below, then drag the cover to move that photo and scroll to zoom it. Each panel can hold a different photo — pick one from the tray first, then click the panel it should fill.</p>
+      <div id="panel-strip" class="strip" aria-label="Panels — click one to select it"></div>
+      <div class="row sliders">
+        <label>Zoom <input id="zoom" type="range" min="1" max="4" step="0.05" value="1"><span id="zoom-val">100%</span></label>
+        <button id="flip" type="button" class="btn small">Flip ↔</button>
+        <button id="reset-crop" type="button" class="btn small">Reset crop</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2>Layout</h2>
+      <div id="layouts" class="picks"></div>
+      <div class="row">
+        <label class="inline">Preview
+          <select id="preview-size">
+            <option value="square">Square 1:1</option>
+            <option value="portrait">Portrait 4:5</option>
+            <option value="wide">Wide 16:9</option>
+          </select>
+        </label>
+        <label class="inline">Grade strength <input id="grade-strength" type="range" min="0" max="100" step="5" value="80"></label>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2>Grade</h2>
+      <div id="grades" class="swatches"></div>
+      <div class="row">
+        <button id="look-sunset" type="button" class="btn small">☀ Sunset look</button>
+        <button id="look-vice" type="button" class="btn small">🌆 Vice look</button>
+        <button id="look-noir" type="button" class="btn small">🌙 Noir look</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2>Lettering</h2>
+      <label>Title <input id="title" type="text" maxlength="26" value="Vice Coast"></label>
+      <label>Subtitle <input id="subtitle" type="text" maxlength="42" value="neon nights, high stakes"></label>
+      <div class="row">
+        <label class="inline">Title size <input id="title-size" type="range" min="60" max="140" step="5" value="100"></label>
+        <label class="inline">Title spot
+          <select id="title-spot">
+            <option value="bottom">Bottom band</option>
+            <option value="top">Top band</option>
+            <option value="hero">Over hero panel</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <label class="inline">Subtitle style
+          <select id="sub-style">
+            <option value="script">Neon script</option>
+            <option value="caps">Spaced caps</option>
+            <option value="none">Hidden</option>
+          </select>
+        </label>
+        <label class="inline">Outline <input id="outline" type="range" min="0" max="14" step="1" value="8"></label>
+      </div>
+      <label>Badge <input id="badge" type="text" maxlength="16" value="Vice Coast"></label>
+      <label>Heat
+        <select id="stars">
+          <option value="0">No stars</option>
+          <option value="1">★</option>
+          <option value="2">★★</option>
+          <option value="3">★★★</option>
+          <option value="4" selected>★★★★</option>
+          <option value="5">★★★★★</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="group">
+      <h2>Finish</h2>
+      <div class="checks">
+        <label><input id="frame" type="checkbox" checked> White frame</label>
+        <label><input id="grain" type="checkbox" checked> Film grain</label>
+        <label><input id="vignette" type="checkbox" checked> Vignette</label>
+        <label><input id="sun" type="checkbox" checked> Sunset disc + palms</label>
+        <label><input id="neon-edge" type="checkbox" checked> Neon panel edges</label>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2>Export</h2>
+      <div id="sizes" class="picks"></div>
+      <div class="row">
+        <button id="export-one" type="button" class="btn primary">Export this size</button>
+        <button id="export-all" type="button" class="btn accent">Export all 3 sizes</button>
+      </div>
+      <div class="row">
+        <button id="surprise" type="button" class="btn">🎲 Surprise me</button>
+        <button id="undo" type="button" class="btn" disabled>↩ Undo</button>
+        <button id="redo" type="button" class="btn" disabled>↪ Redo</button>
+        <button id="reset" type="button" class="btn">Reset</button>
+      </div>
+      <p id="status" role="status"></p>
+    </div>
+
+    <footer>
+      <p>All art drawn in code — no Rockstar logo, artwork or fonts. Lettering uses system display stacks with hand-built gradient, outline and glow effects.</p>
+    </footer>
+  </section>
+
+  <section class="stage" aria-label="Cover preview">
+    <canvas id="cover" width="760" height="760" aria-label="The cover"></canvas>
+    <p class="stage-hint">Live preview — drag a photo, scroll to zoom. Export writes the real PNG.</p>
+  </section>
+</main>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
